@@ -256,6 +256,7 @@ Rolldate.prototype = {
   },
   createBScroll: function (formatAttr, date) {
     const $id = this.domId[formatAttr];
+    const confirm = $('.rolldate-confirm');
     const config = this.config;
     this.scroll[formatAttr] = new BScroll(`#${$id}`, {
       disableMouse: false,
@@ -274,8 +275,16 @@ Rolldate.prototype = {
 
     that.wheelTo(index);
 
+    that.on('scrollStart', () => confirm.classList.add('disabled'));
+    that.on('mousewheelStart', () => confirm.classList.add('disabled'));
+
     // 滚动结束
     that.on('scrollEnd', () => {
+      const isScrolling = Object.values(this.scroll).reduce((prev, curr) => curr.pending || curr, false);
+      if (isScrolling) {
+        confirm.classList.remove('disabled');
+      }
+
       if (config.moveEnd) {
         config.moveEnd.call(this, that);
       }
@@ -409,6 +418,8 @@ Rolldate.prototype = {
       _this.hide(1);
     })
     _this.tap(confirm, function () {
+      if (confirm.classList.contains('disabled')) return;
+
       let config = _this.config,
         el;
 
