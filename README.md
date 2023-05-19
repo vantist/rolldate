@@ -2,7 +2,7 @@
 此插件为[jquery-date](https://github.com/weijhfly/jqueryDatePlugin "jquery-date")的全新版本，主要为了解决旧版参数设计不够合理、滑动效率不高、依赖jquery、没有可选的主题风格等问题，并增加了回调函数，使插件有更大的灵活性。
 
 ## 2023/05/18 3.3.0 版本更新
-1. 新增 `showAMPM` `keepAMPMRight` 參數設定
+1. 新增 `showAMPM` `keepAMPMLeft` 參數設定
 2. format 小時由 `hh` 改為 `HH`
 3. 新增 `am` `pm` 語系設定
 
@@ -77,7 +77,7 @@ value|否|无|日期初始化的默认值，列如'2018-03-18'
 lang|否|年、月、日...|配置插件语言，默认：title:'Select Date',cancel:'Cancel',confirm:'Confirm',<br>year:'Year',month:'Month',day:'Day',hour:'Hour',min:'Min',sec:'Sec',am:'AM',pm:'PM'
 minStep|否|1|分钟按指定数分隔
 showAMPM|否|false|是否使用 12 小時制顯示
-keepAMPMRight|否|true| true = (HH:mm A), false = (A HH:mm)
+keepAMPMLeft|否|false| false = (HH:mm A), true = (A HH:mm)
 init|否|null|插件触发前的回调函数，return false可阻止插件执行
 moveEnd|否|null|插件滚动后的回调函数，函数返回一个参数(better-scroll实例)
 confirm|否|null|确认按钮触发前的回调函数，return false可阻止插件执行，<br>return其他值可修改日期，函数返回一个参数(选中的日期)

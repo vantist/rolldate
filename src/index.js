@@ -86,7 +86,7 @@ Rolldate.prototype = {
       cancel: null,
       minStep: 1,
       showAMPM: false,
-      keepAMPMRight: true,
+      keepAMPMLeft: false,
       trigger: 'tap',
       lang: {
         title: 'Select Date',
@@ -145,7 +145,7 @@ Rolldate.prototype = {
       let f = FormatArr[i],
         domMndex = 0;
 
-      if (f === 'HH' && config.showAMPM && !config.keepAMPMRight) {
+      if (f === 'HH' && config.showAMPM && config.keepAMPMLeft) {
         ul += this.createAmPmUI(date.getHours());
       }
 
@@ -214,7 +214,7 @@ Rolldate.prototype = {
                     <div class="rolldate-dim mask-bottom"></div>
                     <div class="rolldate-wrapper">
                         ${ul}
-                        ${ config.showAMPM && config.keepAMPMRight ? this.createAmPmUI(date.getHours()) : '' }
+                        ${ config.showAMPM && !config.keepAMPMLeft ? this.createAmPmUI(date.getHours()) : '' }
                     </div>
                 </section>
             </div>`,
