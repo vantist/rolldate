@@ -246,7 +246,8 @@ Rolldate.prototype = {
       if (day != $('#' + domId['DD'] + ' li', 1).length) {
 
         for (let l = 1; l <= day; l++) {
-          li += `<li class="wheel-item">${(l+'').padStart(2, '0')}${lang.day}</li>`;
+          const value = (l+'').padStart(2, '0');
+          li += `<li class="wheel-item" data-index="${l - 1}" data-value="${value}">${value}${lang.day}</li>`;
         }
         $('#' + domId['DD'] + ' ul').innerHTML = li;
         this.scroll['DD'].refresh();
@@ -263,9 +264,7 @@ Rolldate.prototype = {
         selectedIndex: 0
       },
       mouseWheel: {
-        speed: 10,
-        invert: false,
-        easeTime: 300
+        speed: 1
       },
     });
 
