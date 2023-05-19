@@ -1,6 +1,11 @@
 # rolldate [![npm](https://img.shields.io/npm/v/@vantist/rolldate)](https://www.npmjs.com/package/@vantist/rolldate) [![npm](https://img.shields.io/npm/dm/@vantist/rolldate)](https://www.npmjs.com/package/@vantist/rolldate)
 此插件为[jquery-date](https://github.com/weijhfly/jqueryDatePlugin "jquery-date")的全新版本，主要为了解决旧版参数设计不够合理、滑动效率不高、依赖jquery、没有可选的主题风格等问题，并增加了回调函数，使插件有更大的灵活性。
 
+## 2023/05/18 3.3.0 版本更新
+1. 新增 `showAMPM` `keepAMPMRight` 參數設定
+2. format 小時由 `hh` 改為 `HH`
+3. 新增 `am` `pm` 語系設定
+
 ## 2023/05/17 3.2.0 版本更新
 1. 新增 `min` `max` 參數設定
 2. 升級 better-scroll v1 -> v2
@@ -63,14 +68,16 @@ seajs.use('rolldate',function(undefined){
 名称|必填|默认值|说明
 ---|:-:|:-:|---
 el|否|无|绑定插件的dom元素，插件内部使用document.querySelector，<br>也可以直接传递dom元素对象，只支持单个
-format|否|'YYYY-MM-DD'|日期格式，无限制。规则：年-YYYY 月-MM 日-DD 时-hh 分-mm 秒-ss 使用/、-、空格、:之一分隔，可随意组合
+format|否|'YYYY-MM-DD'|日期格式，无限制。规则：年-YYYY 月-MM 日-DD 时-HH 分-mm 秒-ss 使用/、-、空格、:之一分隔，可随意组合
 beginYear|否|2000|日期开始年份
 endYear|否|2100|日期结束年份
 min|否|null|最小值，例如'2023-01-01'
 max|否|nuill|最大值，例如'2023-01-01'
 value|否|无|日期初始化的默认值，列如'2018-03-18'
-lang|否|年、月、日...|配置插件语言，默认：title:'选择日期',cancel:'取消',confirm:'确认',<br>year:'年',month:'月',day:'日',hour:'时',min:'分',sec:'秒'
+lang|否|年、月、日...|配置插件语言，默认：title:'Select Date',cancel:'Cancel',confirm:'Confirm',<br>year:'Year',month:'Month',day:'Day',hour:'Hour',min:'Min',sec:'Sec',am:'AM',pm:'PM'
 minStep|否|1|分钟按指定数分隔
+showAMPM|否|false|是否使用 12 小時制顯示
+keepAMPMRight|否|true| true = (HH:mm A), false = (A HH:mm)
 init|否|null|插件触发前的回调函数，return false可阻止插件执行
 moveEnd|否|null|插件滚动后的回调函数，函数返回一个参数(better-scroll实例)
 confirm|否|null|确认按钮触发前的回调函数，return false可阻止插件执行，<br>return其他值可修改日期，函数返回一个参数(选中的日期)

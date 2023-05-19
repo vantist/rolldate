@@ -1,6 +1,6 @@
 {
   "name": "@vantist/rolldate",
-  "version": "3.2.0",
+  "version": "3.3.0",
   "description": "rolldate 多格式、功能强大的移动端日期选择插件",
   "main": "dist/rolldate.min.js",
   "scripts": {
@@ -23,7 +23,8 @@
   "dependencies": {
     "@better-scroll/core": "^2.5.1",
     "@better-scroll/mouse-wheel": "^2.5.1",
-    "@better-scroll/wheel": "^2.5.1"
+    "@better-scroll/wheel": "^2.5.1",
+    "dayjs": "^1.11.7"
   },
   "devDependencies": {
     "autoprefixer": "^9.0.1",
