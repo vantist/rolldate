@@ -48,8 +48,8 @@
 	</div>
 	<div class="container">
 		<h4><strong>支持格式：(无限制)</strong></h4>
-		<p><strong>规则：年-YYYY 月-MM 日-DD 时-hh 分-mm 秒-ss 使用/、-、空格、:之一分隔，可以随意组合</strong></p>
-		<p>例：YYYY-MM、YYYY-MM-DD、YYYY-MM-DD hh:mm、YYYY-MM-DD hh:mm:ss、YYYY、MM、DD、hh:mm、hh:mm:ss、YYYY-MM-DD hh、hh、mm、ss、YYYY/DD...</p>
+		<p><strong>规则：年-YYYY 月-MM 日-DD 时-HH 分-mm 秒-ss 使用/、-、空格、:之一分隔，可以随意组合</strong></p>
+		<p>例：YYYY-MM、YYYY-MM-DD、YYYY-MM-DD HH:mm、YYYY-MM-DD HH:mm:ss、YYYY、MM、DD、HH:mm、HH:mm:ss、YYYY-MM-DD HH、HH、mm、ss、YYYY/DD...</p>
 		<div class="row">
 			<div class="form-group clearfix">
 				<div class="col-xs-6">
@@ -61,23 +61,23 @@
 			</div>
 			<div class="form-group clearfix">
 				<div class="col-xs-6">
-					<input readonly class="form-control" type="text" id="date-group1-3" placeholder="YYYY-MM-DD hh">
+					<input readonly class="form-control" type="text" id="date-group1-3" placeholder="YYYY-MM-DD HH">
 				</div>
 				<div class="col-xs-6">
-					<input readonly class="form-control" type="text" id="date-group1-4" placeholder="YYYY-MM-DD hh:mm">
-				</div>
-			</div>
-			<div class="form-group clearfix">
-				<div class="col-xs-6">
-					<input readonly class="form-control" type="text" id="date-group1-5" placeholder="YYYY-MM-DD hh:mm:ss">
-				</div>
-				<div class="col-xs-6">
-					<input readonly class="form-control" type="text" id="date-group1-6" placeholder="hh:mm">
+					<input readonly class="form-control" type="text" id="date-group1-4" placeholder="YYYY-MM-DD HH:mm">
 				</div>
 			</div>
 			<div class="form-group clearfix">
 				<div class="col-xs-6">
-					<input readonly class="form-control" type="text" id="date-group1-7" placeholder="hh:mm:ss">
+					<input readonly class="form-control" type="text" id="date-group1-5" placeholder="YYYY-MM-DD HH:mm:ss">
+				</div>
+				<div class="col-xs-6">
+					<input readonly class="form-control" type="text" id="date-group1-6" placeholder="HH:mm">
+				</div>
+			</div>
+			<div class="form-group clearfix">
+				<div class="col-xs-6">
+					<input readonly class="form-control" type="text" id="date-group1-7" placeholder="HH:mm:ss">
 				</div>
 				<div class="col-xs-6">
 					<input readonly class="form-control" type="text" id="date-group1-8" placeholder="YYYY">
@@ -93,7 +93,7 @@
 			</div>
 			<div class="form-group clearfix">
 				<div class="col-xs-6">
-					<input readonly class="form-control" type="text" id="date-group1-11" placeholder="hh">
+					<input readonly class="form-control" type="text" id="date-group1-11" placeholder="HH">
 				</div>
 				<div class="col-xs-6">
 					<input readonly class="form-control" type="text" id="date-group1-12" placeholder="mm">
@@ -208,6 +208,38 @@
 				</div>
 			</div>
 		</div>
+		<h4><strong>AM/PM</strong></h4>
+		<div class="row">
+			<div class="form-group clearfix">
+				<div class="col-xs-6">
+					<input readonly class="form-control" type="text" id="date-group12-1" placeholder="AM/PM">
+				</div>
+			</div>
+		</div>
+		<h4><strong>上午/下午</strong></h4>
+		<div class="row">
+			<div class="form-group clearfix">
+				<div class="col-xs-6">
+					<input readonly class="form-control" type="text" id="date-group13-1" placeholder="上午/下午">
+				</div>
+			</div>
+		</div>
+		<h4><strong>最小時間(time)</strong></h4>
+		<div class="row">
+			<div class="form-group clearfix">
+				<div class="col-xs-6">
+					<input readonly class="form-control" type="text" id="date-group14-1" placeholder="不能小於 01:00, 不能大於 22:00">
+				</div>
+			</div>
+		</div>
+		<h4><strong>最小時間(time) AM/PM</strong></h4>
+		<div class="row">
+			<div class="form-group clearfix">
+				<div class="col-xs-6">
+					<input readonly class="form-control" type="text" id="date-group15-1" placeholder="不能小於 01:00, 不能大於 22:00 AM/PM">
+				</div>
+			</div>
+		</div>
 	</div>
 	<script>
 		window.onload = function() {
@@ -227,27 +259,27 @@
 			})
 			new Rolldate({
 				el: '#date-group1-3',
-				format: 'YYYY-MM-DD hh'
+				format: 'YYYY-MM-DD HH'
 			})
 			new Rolldate({
 				el: '#date-group1-4',
-				format: 'YYYY-MM-DD hh:mm',
+				format: 'YYYY-MM-DD HH:mm',
 				beginYear: 2000,
 				endYear: 2100
 			})
 			new Rolldate({
 				el: '#date-group1-5',
-				format: 'YYYY-MM-DD hh:mm:ss',
+				format: 'YYYY-MM-DD HH:mm:ss',
 				beginYear: 2000,
 				endYear: 2100
 			})
 			new Rolldate({
 				el: '#date-group1-6',
-				format: 'hh:mm'
+				format: 'HH:mm'
 			})
 			new Rolldate({
 				el: '#date-group1-7',
-				format: 'hh:mm:ss'
+				format: 'HH:mm:ss'
 			})
 			new Rolldate({
 				el: '#date-group1-8',
@@ -265,7 +297,7 @@
 			})
 			new Rolldate({
 				el: '#date-group1-11',
-				format: 'hh'
+				format: 'HH'
 			})
 			new Rolldate({
 				el: '#date-group1-12',
@@ -364,7 +396,7 @@
 			// 分钟按指定数分隔
 			new Rolldate({
 				el: '#date-group6-1',
-				format: 'hh:mm',
+				format: 'HH:mm',
 				minStep: 5
 			})
 			// 使用原生click
@@ -413,11 +445,69 @@
 
 			// 最小時間
 			new Rolldate({
-				el: '#date-group8-1',
+				el: '#date-group11-1',
 				format: 'YYYY-MM-DD',
 				beginYear: 2000,
 				endYear: 2100,
 				min: '2023-01-01'
+			})
+
+			// AM/PM
+			new Rolldate({
+				el: '#date-group12-1',
+				format: 'HH:mm',
+				ampm: {
+					show: true,
+					keepRight: true
+				},
+				lang: {
+				year: '',
+				month: '',
+				day: '',
+				hour: '',
+				min: '',
+				sec: ''
+			}
+			})
+
+			// 中文 AM/PM
+			new Rolldate({
+				el: '#date-group13-1',
+				format: 'HH:mm',
+				ampm: {
+					show: true,
+					keepRight: false
+				},
+				lang: {
+				year: '',
+				month: '',
+				day: '',
+				hour: '',
+				min: '',
+				sec: '',
+				am: '上午',
+				pm: '下午'
+			}
+			})
+
+			// 最小時間
+			new Rolldate({
+				el: '#date-group14-1',
+				format: 'HH:mm',
+				min: '01:00',
+				max: '22:00'
+			})
+
+			// 最小時間
+			new Rolldate({
+				el: '#date-group15-1',
+				format: 'HH:mm',
+				min: '01:00',
+				max: '22:00',
+				ampm: {
+					show: true,
+					keepRight: true
+				}
 			})
 		}
 	</script>
