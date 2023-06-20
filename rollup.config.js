@@ -15,9 +15,9 @@ let year = new Date().getFullYear(),
 
 let bannerText = `Rolldate ${version}
 Copyright 2018-${year}
-weijhfly https://github.com/weijhfly/rolldate
+Vantist https://github.com/vantist/rolldate
 Licensed under MIT
-Released on: aug 4, 2018`;
+Released on: jun 20, 2023`;
 
 console.log(bannerText)
 let config = {
