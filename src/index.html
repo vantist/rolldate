@@ -360,6 +360,7 @@
 				title: '自定義標題',
 				cancel: '取消',
 				confirm: '確認',
+				reset: '重置',
 				year: '年',
 				month: '月',
 				day: '日',
@@ -412,6 +413,9 @@
 			var rd = new Rolldate({
 				confirm: function(date) {
 					el.value = date;
+				},
+				reset: function() {
+					el.value = '';
 				}
 			})
 
@@ -490,7 +494,7 @@
 			new Rolldate({
 				el: '#date-group14-1',
 				format: 'HH:mm',
-				min: '01:00',
+				min: '18:00',
 				max: '22:00'
 			})
 

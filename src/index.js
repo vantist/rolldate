@@ -41,24 +41,7 @@ function Rolldate(config = {}) {
   }
   // 设置默认日期
   if (config.value) {
-    if (config.el) {
-      if (el.nodeName.toLowerCase() == 'input') {
-        el.value = config.value;
-      } else {
-        el.innerText = config.value;
-      }
-    }
-    const date  = dayjs(config.value, config.format).toDate();
-
-    if (!date || date == 'Invalid Date') {
-      console.error('Invalid Date: ' + str);
-    } else {
-      if (config.el) {
-        el.bindDate = date;
-      } else {
-        _this.bindDate = date;
-      }
-    }
+    _this.setDefault();
   }
 }
 Rolldate.prototype = {
@@ -78,11 +61,13 @@ Rolldate.prototype = {
       format: 'YYYY-MM-DD',
       beginYear: 2000,
       endYear: 2100,
+      value: null,
       min: null,
       max: null,
       init: null,
       moveEnd: null,
       confirm: null,
+      reset: null,
       cancel: null,
       minStep: 1,
       showAMPM: false,
@@ -91,6 +76,7 @@ Rolldate.prototype = {
       lang: {
         title: 'Select Date',
         cancel: 'Cancel',
+        reset: 'Reset', 
         confirm: 'Confirm',
         year: 'Year',
         month: 'Month',
@@ -217,6 +203,9 @@ Rolldate.prototype = {
                         ${ config.showAMPM && !config.keepAMPMLeft ? this.createAmPmUI(date.getHours()) : '' }
                     </div>
                 </section>
+                <footer>
+                    <span class="rolldate-btn rolldate-reset">${lang.reset}</span>
+                </footer>
             </div>`,
       box = document.createElement("div");
 
@@ -233,7 +222,7 @@ Rolldate.prototype = {
     if (config.showAMPM ) {
       this.createBScroll.call(this, 'A', date);
     }
-
+    this.adjustMinMax(0);
     $('.rolldate-panel').className = 'rolldate-panel fadeIn';
   },
   adjustMonthlyDay: function (scroll) {
@@ -257,6 +246,7 @@ Rolldate.prototype = {
   createBScroll: function (formatAttr, date) {
     const $id = this.domId[formatAttr];
     const confirm = $('.rolldate-confirm');
+    const reset = $('.rolldate-reset');
     const config = this.config;
     this.scroll[formatAttr] = new BScroll(`#${$id}`, {
       disableMouse: false,
@@ -275,55 +265,68 @@ Rolldate.prototype = {
 
     that.wheelTo(index);
 
-    that.on('scrollStart', () => confirm.classList.add('disabled'));
-    that.on('mousewheelStart', () => confirm.classList.add('disabled'));
+    that.on('scrollStart', () => {
+      reset.classList.add('disabled');
+      confirm.classList.add('disabled')
+    });
+    that.on('mousewheelStart', () => {
+      reset.classList.add('disabled');
+      confirm.classList.add('disabled')
+    });
 
     // 滚动结束
     that.on('scrollEnd', () => {
-      const isScrolling = Object.values(this.scroll).reduce((prev, curr) => curr.pending || curr, false);
-      if (isScrolling) {
+      const isScrollEnd = Object.values(this.scroll).reduce((prev, curr) => curr.pending || curr, false);
+      if (isScrollEnd) {
         confirm.classList.remove('disabled');
+        reset.classList.remove('disabled');
       }
 
       if (config.moveEnd) {
         config.moveEnd.call(this, that);
       }
-      const date = this.getSelectedDate(),
-        current = dayjs(date),
-        min = dayjs(config.min, config.format),
-        max = dayjs(config.max, config.format);
-      if (current.isBefore(min)) {
-        this.scrollToDateTime(min);
-      }
-      if (current.isAfter(max)) {
-        this.scrollToDateTime(max);
-      }
+
+      this.adjustMinMax.call(this);
       this.adjustMonthlyDay.call(this, that);
     })
   },
-  scrollToDateTime: function (date) {
+  adjustMinMax: function (animateTime = 500) {
+    console.log('adjustMinMax', animateTime)
+    const config = this.config;
+    const date = this.getSelectedDate(),
+      current = dayjs(date),
+      min = dayjs(config.min, config.format),
+      max = dayjs(config.max, config.format);
+    if (current.isBefore(min)) {
+      this.scrollToDateTime(min, animateTime);
+    }
+    if (current.isAfter(max)) {
+      this.scrollToDateTime(max, animateTime);
+    }
+  },
+  scrollToDateTime: function (date, animateTime = 500) {
     if (this.scroll['YYYY']) {
-      this.scroll['YYYY'].wheelTo(date.year() - this.config.beginYear);
+      this.scroll['YYYY'].wheelTo(date.year() - this.config.beginYear, animateTime);
     }
     if (this.scroll['MM']) {
-      this.scroll['MM'].wheelTo(date.month());
+      this.scroll['MM'].wheelTo(date.month(), animateTime);
     }
     if (this.scroll['DD']) {
-      this.scroll['DD'].wheelTo(date.date() - 1);
+      this.scroll['DD'].wheelTo(date.date() - 1, animateTime);
     }
     if (this.scroll['HH']) {
       if (this.config.showAMPM) {
-        this.scroll['A'].wheelTo(Math.floor( date.hour() / 12));
-        this.scroll['HH'].wheelTo(date.hour() % 12);
+        this.scroll['A'].wheelTo(Math.floor( date.hour() / 12), animateTime);
+        this.scroll['HH'].wheelTo(date.hour() % 12, animateTime);
       } else {
-        this.scroll['HH'].wheelTo(date.hour());
+        this.scroll['HH'].wheelTo(date.hour(), animateTime);
       }
     }
     if (this.scroll['mm']) {
-      this.scroll['mm'].wheelTo(date.minute());
+      this.scroll['mm'].wheelTo(Math.round(date.minute() / this.config.minStep), animateTime);
     }
     if (this.scroll['ss']) {
-      this.scroll['ss'].wheelTo(date.minute());
+      this.scroll['ss'].wheelTo(date.minute(), animateTime);
     }
   },
   tap: function (el, fn) {
@@ -409,7 +412,8 @@ Rolldate.prototype = {
     let _this = this,
       mask = $('.rolldate-mask'),
       cancel = $('.rolldate-cancel'),
-      confirm = $('.rolldate-confirm');
+      confirm = $('.rolldate-confirm'),
+      reset = $('.rolldate-reset');
 
     _this.tap(mask, function () {
       _this.hide(1);
@@ -420,8 +424,7 @@ Rolldate.prototype = {
     _this.tap(confirm, function () {
       if (confirm.classList.contains('disabled')) return;
 
-      let config = _this.config,
-        el;
+      let config = _this.config;
 
       const date = _this.getSelectedDate();
       let displayValue = dayjs(date).format(config.format);
@@ -434,20 +437,50 @@ Rolldate.prototype = {
           displayValue = flag;
         }
       }
-      if (config.el) {
-        el = $(config.el);
-        if (el.nodeName.toLowerCase() == 'input') {
-          el.value = displayValue;
-        } else {
-          el.innerText = displayValue;
-        }
-        el.bindDate = date;
-      } else {
-        _this.bindDate = date;
-      }
+      _this.bindDateToEl(date, displayValue);
       _this.hide();
-
     })
+    _this.tap(reset, function () {
+      if (reset.classList.contains('disabled')) return;
+
+      let config = _this.config,
+        resetValue,
+        el = config.el ? $(config.el) : null;
+ 
+      if (config.reset) {
+        const value = el ? el.value : '';
+        resetValue = config.reset.call(_this, value);
+        _this.setDefault(resetValue);
+      } else {
+        _this.setDefault();
+      }
+
+      let date;
+      if (config.value) {
+        date = el ? el.bindDate : _this.bindDate;
+      } else {
+        date = new Date();
+      }
+
+      _this.scrollToDateTime(dayjs(date));
+      _this.adjustMinMax();
+    })
+  },
+  bindDateToEl: function (date, displayValue) {
+    let config = this.config,
+      el;
+
+    if (config.el) {
+      el = $(config.el);
+      if (el.nodeName.toLowerCase() == 'input') {
+        el.value = displayValue;
+      } else {
+        el.innerText = displayValue;
+      }
+      el.bindDate = date;
+    } else {
+      this.bindDate = date;
+    }
   },
   getSelectedDate: function () {
     const date = new Date();
@@ -494,6 +527,7 @@ Rolldate.prototype = {
     _this.tap($('.rolldate-mask'), 0);
     _this.tap($('.rolldate-cancel'), 0);
     _this.tap($('.rolldate-confirm'), 0);
+    _this.tap($('.rolldate-reset'), 0);
     setTimeout(function () {
       let el = $('.rolldate-container');
 
@@ -503,6 +537,16 @@ Rolldate.prototype = {
   },
   getSelected: function (scroll) {
     return $('#' + scroll.wrapper.id + ' li', 1)[scroll.getSelectedIndex()].dataset.value;
+  },
+  setDefault: function (defaultValue) {
+    const displayValue = defaultValue || this.config.value || '';
+    const date  = dayjs(displayValue, this.config.format).toDate();
+
+    if (!date || date == 'Invalid Date') {
+      this.bindDateToEl(new Date(), displayValue);
+    } else {
+      this.bindDateToEl(date, displayValue);
+    }
   }
 }
 Rolldate.version = version;
