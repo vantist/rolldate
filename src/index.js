@@ -291,7 +291,6 @@ Rolldate.prototype = {
     })
   },
   adjustMinMax: function (animateTime = 500) {
-    console.log('adjustMinMax', animateTime)
     const config = this.config;
     const date = this.getSelectedDate(),
       current = dayjs(date),
