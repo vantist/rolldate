@@ -482,30 +482,55 @@ Rolldate.prototype = {
     }
   },
   getSelectedDate: function () {
-    const date = new Date();
-
-    for (let f in this.scroll) {
-      if (f === 'A') break;
-      let d = this.getSelected(this.scroll[f]);
-
-      if (f == 'YYYY') {
-        date.setFullYear(d);
-      } else if (f == 'MM') {
-        date.setMonth(d - 1);
-      } else if (f == 'DD') {
-        date.setDate(d);
-      } else if (f == 'HH') {
-        if (this.config.showAMPM) {
-          d = parseInt(d) + this.getSelected(this.scroll['A']) * 12;
-          d = (d+'').padStart(2, '0');
+    // 建立映射關係，定義各滾輪值如何應用到日期上
+    const setterMap = {
+      'YYYY': (date, value) => date.setFullYear(value),
+      'MM': () => {}, // 月份稍後處理
+      'DD': () => {}, // 日期稍後處理
+      'HH': (date, value, config, ampm) => {
+        if (config.showAMPM) {
+          const hour = parseInt(value) + (ampm || 0) * 12;
+          date.setHours(hour);
+        } else {
+          date.setHours(value);
         }
-        date.setHours(d);
-      } else if (f == 'mm') {
-        date.setMinutes(d);
-      } else if (f == 'ss') {
-        date.setSeconds(d);
+      },
+      'mm': (date, value) => date.setMinutes(value),
+      'ss': (date, value) => date.setSeconds(value)
+    };
+
+    // 收集所有滾輪的數值
+    const selected = {};
+    let ampmValue;
+    
+    Object.entries(this.scroll).forEach(([key, scroll]) => {
+      if (key === 'A') {
+        ampmValue = this.getSelected(scroll);
+        return;
       }
+      selected[key] = parseInt(this.getSelected(scroll));
+    });
+
+    // 創建新的日期物件
+    const date = new Date();
+    
+    // 先處理非日期和月份的設置
+    Object.entries(selected).forEach(([key, value]) => {
+      if (key !== 'MM' && key !== 'DD') {
+        setterMap[key](date, value, this.config, ampmValue);
+      }
+    });
+    
+    // 日期和月份特殊處理，避免日期溢出問題
+    if (selected.MM && selected.DD) {
+      date.setDate(1); // 先設為1號，避免月份切換時的溢出問題
+      date.setMonth(selected.MM - 1);
+      
+      // 確保日期不超過當月最大天數
+      const maxDays = this.getMonthlyDay(date.getFullYear(), date.getMonth());
+      date.setDate(Math.min(selected.DD, maxDays));
     }
+    
     return date;
   },
   getMonthlyDay: function (year, month) {

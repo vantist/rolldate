@@ -1,7 +1,10 @@
 # rolldate [![npm](https://img.shields.io/npm/v/@vantist/rolldate)](https://www.npmjs.com/package/@vantist/rolldate) [![npm](https://img.shields.io/npm/dm/@vantist/rolldate)](https://www.npmjs.com/package/@vantist/rolldate)
 此插件為[jquery-date](https://github.com/weijhfly/jqueryDatePlugin "jquery-date")的全新版本，主要為了解決舊版參數設計不夠合理、滑動效率不高、依賴jquery、沒有可選的主題風格等問題，並增加了回調函數，使插件有更大的靈活性。
 
-## 2024/06/11 3.4.0 版本新
+## 2025/03/31 3.4.2 版本更新
+1. 修正 3/31 時選擇 4/30 會跳到 5/30 的問題
+
+## 2024/06/11 3.4.0 版本更新
 1. 新增 `reset` 按鈕及參數設定
 
 ## 2023/05/18 3.3.0 版本更新
